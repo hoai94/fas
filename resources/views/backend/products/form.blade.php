@@ -1,4 +1,7 @@
 @extends('backend.dashboard')
+@section('css')
+    <link rel="stylesheet" href="theme_admin/css/select2.css">   
+@endsection
 @section('content')
 
     <!-- Content Header (Page header) -->
@@ -90,9 +93,7 @@
                                 <textarea name="content" id="content"
                                     class="form-control">{{ old('content') }}</textarea>
                             </div>
-
-                            <div class="row">
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <div class="col-12">
                                         <div class="form-check">
                                             <div class="custom-control custom-checkbox ">
@@ -103,9 +104,15 @@
                                                 </div>
                                             </div>
                                     </div>
-                                </div>
-                                
+                                </div> --}}
+                            <div class="form-group">
+                                <select class="form-control menu-select" name="menu_id[]" multiple="multiple" >
+                                    @foreach ($menus as $menu)
+                                        <option value="{{ $menu->id }}">{{ $menu->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
+                            
 
                             <div class="row">
                                 <div class="col-3">
@@ -170,4 +177,15 @@
         </div>
     </section>
     <!-- /.content -->
+@endsection
+
+@section('script')
+    <script src="theme_admin/js/select2.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.menu-select').select2({
+                placeholder: "Select a menu",
+            });
+        });
+    </script>
 @endsection

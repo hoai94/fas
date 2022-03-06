@@ -34,10 +34,9 @@ class PostController extends Controller
     public function getAdd()
     {
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
-            return view('backend.post.form');
-        }
-        abort(403);
+        $this->authorize('authorized', $route);
+
+        return view('backend.post.form');
     }
     public function postAdd(Request $request)
     {
@@ -50,12 +49,12 @@ class PostController extends Controller
     public function getEdit(Post $post)
     {
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
-            return view('backend.post.edit', [
-                'post' => $post
-            ]);
-        }
-        abort(403);
+        $this->authorize('authorized', $route);
+        
+        return view('backend.post.edit', [
+            'post' => $post
+        ]);
+       
     }
     public function postEdit(Post $post, Request $request)
     {

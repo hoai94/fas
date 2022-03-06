@@ -158,36 +158,13 @@ Route::post('/load-more-menu',[App\Http\Controllers\Frontend\MenuController::cla
 Route::post('/ajax-login',[App\Http\Controllers\Frontend\CustomerController::class,'ajaxLogin'])->name('ajax.login');
 
 
-#test
-Route::get('/test',function ()  {
-  // dd(Auth::guard('customer')->user()->name);
-    $carts = Session::get('carts');
-        if (is_null($carts)) return [];
-
-        $productId = array_keys($carts);
-        $products = Product::select('id', 'name', 'price', 'sale_off')
-            ->where('status', 1)
-            ->whereIn('id', $productId)
-            ->get();
-    
-    $customer = Auth::guard('customer')->user();
-    TestJob::dispatch($products ,$customer,$carts)->delay(now()->addMinutes(1));
-    
-});
-
 Route::get('/customer',[App\Http\Controllers\Backend\CustomerController::class,'index']);
 
-// Route::get('/start-job', function () {
-//     Artisan::call('queue:work');
-//     echo 'done';
-// });
 Route::get('/clear', function () {
     Artisan::call('queue:restart');
     echo 'done';
 });
 
-Route::get('/start-job', function () {
-    //dd(Artisan::queue('work'));
-    $output = shell_exec('php D:\xampp\htdocs\fashion-shop\artisan queue:work');
-    echo $output;
+Route::get('/app', function () {
+    dd($this->app);
 });

@@ -1,5 +1,7 @@
 @extends('backend.dashboard')
-
+@section('css')
+    <link rel="stylesheet" href="theme_admin/css/select2.css">   
+@endsection
 @section('content')
 
     <!-- Content Header (Page header) -->
@@ -48,7 +50,7 @@
                             <td>{{ $user->email }}</td>
                             <td>
                                 @foreach ( $user->roles as $item)
-                                {{ $item->name }}
+                                    <span class="badge badge-success">{{ $item->name }}</span>
                                 @endforeach
                             </td>
                            
@@ -60,22 +62,16 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="menu">List roles</label>
-                                   
-                                    @foreach ($roles as $role)
-                                        {{-- @foreach ( $user->roles as $item)
-                                            @if ($role->id != $item->id) --}}
-                                                <div>
-                                                    <input type="checkbox" name="role[]" id="" value="{{$role->id}}"> 
-                                                    <label for="">{{$role->name}} </label>
-                                                </div>
-                                            {{-- @endif
-                                        @endforeach                                        --}}
-                                    @endforeach
+                                    <label for="menu">List roles</label>                                 
+                                    <select class="form-control role-select" name="role[]" multiple="multiple" >
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             @csrf
-                            <div class="card-footer">
+                            <div class="card-footer mt-3">
                                 <button type="submit" class="btn btn-primary">Thêm</button>
                                 <a href="/backend/list-product" class="btn btn-primary">Quay lại</a>
                             </div>
@@ -88,4 +84,14 @@
         </div>
     </section>
     <!-- /.content -->
+@endsection
+@section('script')
+    <script src="theme_admin/js/select2.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.role-select').select2({
+                placeholder: "Select a role",
+            });
+        });
+    </script>
 @endsection

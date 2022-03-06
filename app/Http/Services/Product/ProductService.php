@@ -17,30 +17,10 @@ class ProductService {
         return Menu::where('status', 1)->get();
     }
 
-    protected function isValidPrice($request)
-    {
-        if ($request->input('price') != 0 && $request->input('sale_off') != 0
-            && $request->input('sale_off') >= $request->input('price')
-        ) {
-            Session::flash('error', 'Giá giảm phải nhỏ hơn giá gốc');
-            return false;
-        }
-
-        if ($request->input('sale_off') != 0 && (int)$request->input('price') == 0) {
-            Session::flash('error', 'Vui lòng nhập giá gốc');
-            return false;
-        }
-
-        return  true;
-    }
-
-
     public function insert($request)
     {
-        $isValidPrice = $this->isValidPrice($request);
-
-        if ($isValidPrice === false) return false;
         if ($request->hasFile('image')) {
+
             $image = $request->file('image');            
             $imageName = Str::random(40) . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('upload\images\thumb');
@@ -67,7 +47,6 @@ class ProductService {
                 'image' => $imageName
             ]);
             if($request->menu_id){
-               // dd($product->id);
                $product->menus()->attach($request->menu_id);
             }
             Session::flash('messages', 'Thêm Sản phẩm thành công');
@@ -89,8 +68,6 @@ class ProductService {
 
     public function update($request, $product)
     {
-        $isValidPrice = $this->isValidPrice($request);
-        if ($isValidPrice === false) return false;
         if ($request->hasFile('image')) {
             
             $image = $request->file('image');            

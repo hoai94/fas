@@ -19,10 +19,9 @@ class SliderController extends Controller
     }
     public function getAdd(){
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
+        $this->authorize('authorized', $route);
+
         return view('backend.sliders.form');
-        }
-        abort(403);
     }
     public function postAdd(Request $request){
         
@@ -37,13 +36,12 @@ class SliderController extends Controller
     }
 
     public function getEdit (Slider $slider){
-        $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
+       $route = Route::currentRouteName();
+        $this->authorize('authorized', $route);
+
         return view('backend.sliders.edit',[
             'slider' => $slider,
         ]);
-        }
-        abort(403);
     }
     public function postEdit (Request $request,Slider $slider){
         

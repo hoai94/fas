@@ -33,16 +33,17 @@ class ProductController extends Controller
     public function getAdd()
     {
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
-            return view('backend.products.form', [
-                'title' => 'Thêm Sản Phẩm Mới',
-                'menus' => $this->productService->getMenu()
-            ]);
-        }
-        abort(403);
+        $this->authorize('authorized', $route);
+
+        return view('backend.products.form', [
+            'title' => 'Thêm Sản Phẩm Mới',
+            'menus' => $this->productService->getMenu()
+        ]);
+        
     }
     public function postAdd(ProductRequest $request)
     {
+        // dd($request->menu_id);
         $this->productService->insert($request);
         return redirect()->back();
     }
@@ -50,14 +51,14 @@ class ProductController extends Controller
     public function getEdit(Product $product)
     {   
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
-            return view('backend.products.edit', [
-                'title' => 'Chỉnh Sửa Sản Phẩm',
-                'product' => $product,
-                'menus' => $this->productService->getMenu()
-            ]);
-            }
-        abort(403);
+        $this->authorize('authorized', $route);
+        
+        return view('backend.products.edit', [
+            'title' => 'Chỉnh Sửa Sản Phẩm',
+            'product' => $product,
+            'menus' => $this->productService->getMenu()
+        ]);
+           
     }
 
     public function postEdit(EditProductRequest $request, Product $product)

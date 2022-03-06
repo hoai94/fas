@@ -22,7 +22,7 @@ class MenuController extends Controller
 
     public function getAdd (){
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
+        if (Gate::allows('authorized', $route)) {
             return view('backend.menus.form', [
                 'title' => 'Thêm Danh Mục Mới',
                 'menus' => $this->menuService->getParent()
@@ -41,26 +41,24 @@ class MenuController extends Controller
     public function index()
     {
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
-            return view('backend.menus.list', [
-                'title' => 'Danh Sách Danh Mục Mới Nhất',
-                'menus' => $this->menuService->getAll()
-            ]);
-        }
-        abort(403);
+        $this->authorize('authorized', $route);
+        
+        return view('backend.menus.list', [
+            'title' => 'Danh Sách Danh Mục Mới Nhất',
+            'menus' => $this->menuService->getAll()
+        ]);
     }
 
     public function getEdit(Menu $menu){
 
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
-            return view('backend.menus.edit', [
-                'title' => 'Chỉnh Sửa Danh Mục: ' . $menu->name,
-                'menu' => $menu,
-                'menus' => $this->menuService->getParent()
-            ]);
-        }
-        abort(403);
+        $this->authorize('authorized', $route);
+
+        return view('backend.menus.edit', [
+            'title' => 'Chỉnh Sửa Danh Mục: ' . $menu->name,
+            'menu' => $menu,
+            'menus' => $this->menuService->getParent()
+        ]);
     }
     public function postEdit(Menu $menu, Request $request)
     {

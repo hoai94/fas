@@ -35,12 +35,15 @@ class AuthServiceProvider extends ServiceProvider
         //     return false;
         // });
 
-        Gate::define('product', function (User $user, $route) {
-            $arr = []; 
-            foreach ($user->hasAccess() as $key => $value) {
-                $arr[] = $value;
-            }  
-             return in_array($route,$arr) ? true : false ; 
+        Gate::define('authorized', function (User $user, $route) {
+            $arr = [];
+            if ($user->hasAccess()) {
+                foreach ($user->hasAccess() as $key => $value) {
+                    $arr[] = $value;
+                }  
+                return in_array($route,$arr) ? true : false ;
+            } 
+            return false;
         });
         Gate::define('assign', function (User $user) {
            

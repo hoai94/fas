@@ -12,12 +12,11 @@ class RoleController extends Controller
 {
     public function index(){
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
+        $this->authorize('authorized', $route);
+
         return view('backend.roles.list',[
             'list' => Role::all(['id','name','slug','permission','updated_at'])
         ]);
-        }
-        abort(403);
     }
 
 
@@ -41,10 +40,9 @@ class RoleController extends Controller
     }
     public function getAdd(){
         $route = Route::currentRouteName();
-        if (Gate::allows('product', $route)) {
+        $this->authorize('authorized', $route);
+        
         return view('backend.roles.form');
-        }
-        abort(403);
     }
     public function postAdd(Request $request){
         $per =json_encode( explode(',',$request->permission));
